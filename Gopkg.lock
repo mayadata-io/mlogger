@@ -96,9 +96,13 @@
   analyzer-version = 1
   input-imports = [
     "github.com/Sirupsen/logrus",
+    "github.com/go-kit/kit/log",
     "github.com/go-kit/kit/log/level",
+    "github.com/go-logfmt/logfmt",
     "github.com/golang/glog",
+    "github.com/konsorten/go-windows-terminal-sequences",
     "go.uber.org/zap",
+    "golang.org/x/sys/unix",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
