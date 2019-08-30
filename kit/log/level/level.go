@@ -1,6 +1,6 @@
 package level
 
-import "github.com/go-kit/kit/log"
+import "github.com/mlogger/kit/log"
 
 // Error returns a logger that includes a Key/ErrorValue pair.
 func Error(logger log.Logger) log.Logger {
@@ -37,40 +37,6 @@ func NewFilter(next log.Logger, options ...Option) log.Logger {
 	return l
 }
 
-type logger struct {
-	next           log.Logger
-	allowed        level
-	squelchNoLevel bool
-	errNotAllowed  error
-	errNoLevel     error
-}
-
-func (l *logger) Log(keyvals ...interface{}) error {
-	var hasLevel, levelAllowed bool
-	for i := 1; i < len(keyvals); i += 2 {
-		if v, ok := keyvals[i].(*levelValue); ok {
-			hasLevel = true
-			levelAllowed = l.allowed&v.level != 0
-			break
-		}
-	}
-	if !hasLevel && l.squelchNoLevel {
-		return l.errNoLevel
-	}
-	if hasLevel && !levelAllowed {
-		return l.errNotAllowed
-	}
-	return l.next.Log(keyvals...)
-}
-
-// Option sets a parameter for the leveled logger.
-type Option func(*logger)
-
-// AllowAll is an alias for AllowDebug.
-func AllowAll() Option {
-	return AllowDebug()
-}
-
 // AllowDebug allows error, warn, info and debug level log events to pass.
 func AllowDebug() Option {
 	return allowed(levelError | levelWarn | levelInfo | levelDebug)
@@ -96,9 +62,6 @@ func AllowNone() Option {
 	return allowed(0)
 }
 
-func allowed(allowed level) Option {
-	return func(l *logger) { l.allowed = allowed }
-}
 
 // ErrNotAllowed sets the error to return from Log when it squelches a log
 // event disallowed by the configured Allow[Level] option. By default,
@@ -133,23 +96,6 @@ func NewInjector(next log.Logger, level Value) log.Logger {
 	}
 }
 
-type injector struct {
-	next  log.Logger
-	level interface{}
-}
-
-func (l *injector) Log(keyvals ...interface{}) error {
-	for i := 1; i < len(keyvals); i += 2 {
-		if _, ok := keyvals[i].(*levelValue); ok {
-			return l.next.Log(keyvals...)
-		}
-	}
-	kvs := make([]interface{}, len(keyvals)+2)
-	kvs[0], kvs[1] = key, l.level
-	copy(kvs[2:], keyvals)
-	return l.next.Log(kvs...)
-}
-
 // Value is the interface that each of the canonical level values implement.
 // It contains unexported methods that prevent types from other packages from
 // implementing it and guaranteeing that NewFilter can distinguish the levels
@@ -175,31 +121,4 @@ func InfoValue() Value { return infoValue }
 // DebugValue returns the unique value added to log events by Warn.
 func DebugValue() Value { return debugValue }
 
-var (
-	// key is of type interface{} so that it allocates once during package
-	// initialization and avoids allocating every time the value is added to a
-	// []interface{} later.
-	key interface{} = "level"
-
-	errorValue = &levelValue{level: levelError, name: "error"}
-	warnValue  = &levelValue{level: levelWarn, name: "warn"}
-	infoValue  = &levelValue{level: levelInfo, name: "info"}
-	debugValue = &levelValue{level: levelDebug, name: "debug"}
-)
-
-type level byte
-
-const (
-	levelDebug level = 1 << iota
-	levelInfo
-	levelWarn
-	levelError
-)
-
-type levelValue struct {
-	name string
-	level
-}
-
 func (v *levelValue) String() string { return v.name }
-func (v *levelValue) levelVal()      {}

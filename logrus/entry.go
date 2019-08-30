@@ -12,35 +12,6 @@ import (
 	"time"
 )
 
-var (
-	bufferPool *sync.Pool
-
-	// qualified package name, cached at first use
-	logrusPackage string
-
-	// Positions in the call stack when tracing to report the calling method
-	minimumCallerDepth int
-
-	// Used for caller information initialisation
-	callerInitOnce sync.Once
-)
-
-const (
-	maximumCallerDepth int = 25
-	knownLogrusFrames  int = 4
-)
-
-func init() {
-	bufferPool = &sync.Pool{
-		New: func() interface{} {
-			return new(bytes.Buffer)
-		},
-	}
-
-	// start at the bottom of the stack before the package-name cache is primed
-	minimumCallerDepth = 1
-}
-
 // Defines the key when adding errors using WithError.
 var ErrorKey = "error"
 
@@ -147,22 +118,6 @@ func (entry *Entry) WithTime(t time.Time) *Entry {
 	return &Entry{Logger: entry.Logger, Data: entry.Data, Time: t, err: entry.err, Context: entry.Context}
 }
 
-// getPackageName reduces a fully qualified function name to the package name
-// There really ought to be to be a better way...
-func getPackageName(f string) string {
-	for {
-		lastPeriod := strings.LastIndex(f, ".")
-		lastSlash := strings.LastIndex(f, "/")
-		if lastPeriod > lastSlash {
-			f = f[:lastPeriod]
-		} else {
-			break
-		}
-	}
-
-	return f
-}
-
 // getCaller retrieves the name of the first non-logrus calling function
 func getCaller() *runtime.Frame {
 
@@ -199,68 +154,6 @@ func (entry Entry) HasCaller() (has bool) {
 	return entry.Logger != nil &&
 		entry.Logger.ReportCaller &&
 		entry.Caller != nil
-}
-
-// This function is not declared with a pointer value because otherwise
-// race conditions will occur when using multiple goroutines
-func (entry Entry) log(level Level, msg string) {
-	var buffer *bytes.Buffer
-
-	// Default to now, but allow users to override if they want.
-	//
-	// We don't have to worry about polluting future calls to Entry#log()
-	// with this assignment because this function is declared with a
-	// non-pointer receiver.
-	if entry.Time.IsZero() {
-		entry.Time = time.Now()
-	}
-
-	entry.Level = level
-	entry.Message = msg
-	if entry.Logger.ReportCaller {
-		entry.Caller = getCaller()
-	}
-
-	entry.fireHooks()
-
-	buffer = bufferPool.Get().(*bytes.Buffer)
-	buffer.Reset()
-	defer bufferPool.Put(buffer)
-	entry.Buffer = buffer
-
-	entry.write()
-
-	entry.Buffer = nil
-
-	// To avoid Entry#log() returning a value that only would make sense for
-	// panic() to use in Entry#Panic(), we avoid the allocation by checking
-	// directly here.
-	if level <= PanicLevel {
-		panic(&entry)
-	}
-}
-
-func (entry *Entry) fireHooks() {
-	entry.Logger.mu.Lock()
-	defer entry.Logger.mu.Unlock()
-	err := entry.Logger.Hooks.Fire(entry.Level, entry)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to fire hook: %v\n", err)
-	}
-}
-
-func (entry *Entry) write() {
-	entry.Logger.mu.Lock()
-	defer entry.Logger.mu.Unlock()
-	serialized, err := entry.Logger.Formatter.Format(entry)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to obtain reader, %v\n", err)
-	} else {
-		_, err = entry.Logger.Out.Write(serialized)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Failed to write to log, %v\n", err)
-		}
-	}
 }
 
 func (entry *Entry) Log(level Level, args ...interface{}) {
@@ -397,11 +290,3 @@ func (entry *Entry) Panicln(args ...interface{}) {
 	entry.Logln(PanicLevel, args...)
 }
 
-// Sprintlnn => Sprint no newline. This is to get the behavior of how
-// fmt.Sprintln where spaces are always added between operands, regardless of
-// their type. Instead of vendoring the Sprintln implementation to spare a
-// string allocation, we do the simplest thing.
-func (entry *Entry) sprintlnn(args ...interface{}) string {
-	msg := fmt.Sprintln(args...)
-	return msg[:len(msg)-1]
-}

@@ -55,62 +55,10 @@ func NewSyncWriter(w io.Writer) io.Writer {
 	}
 }
 
-// syncWriter synchronizes concurrent writes to an io.Writer.
-type syncWriter struct {
-	sync.Mutex
-	io.Writer
-}
-
-// Write writes p to the underlying io.Writer. If another write is already in
-// progress, the calling goroutine blocks until the syncWriter is available.
-func (w *syncWriter) Write(p []byte) (n int, err error) {
-	w.Lock()
-	n, err = w.Writer.Write(p)
-	w.Unlock()
-	return n, err
-}
-
-// fdWriter is an io.Writer that also has an Fd method. The most common
-// example of an fdWriter is an *os.File.
-type fdWriter interface {
-	io.Writer
-	Fd() uintptr
-}
-
-// fdSyncWriter synchronizes concurrent writes to an fdWriter.
-type fdSyncWriter struct {
-	sync.Mutex
-	fdWriter
-}
-
-// Write writes p to the underlying io.Writer. If another write is already in
-// progress, the calling goroutine blocks until the fdSyncWriter is available.
-func (w *fdSyncWriter) Write(p []byte) (n int, err error) {
-	w.Lock()
-	n, err = w.fdWriter.Write(p)
-	w.Unlock()
-	return n, err
-}
-
-// syncLogger provides concurrent safe logging for another Logger.
-type syncLogger struct {
-	mu     sync.Mutex
-	logger Logger
-}
-
 // NewSyncLogger returns a logger that synchronizes concurrent use of the
 // wrapped logger. When multiple goroutines use the SyncLogger concurrently
 // only one goroutine will be allowed to log to the wrapped logger at a time.
 // The other goroutines will block until the logger is available.
 func NewSyncLogger(logger Logger) Logger {
 	return &syncLogger{logger: logger}
-}
-
-// Log logs keyvals to the underlying Logger. If another log is already in
-// progress, the calling goroutine blocks until the syncLogger is available.
-func (l *syncLogger) Log(keyvals ...interface{}) error {
-	l.mu.Lock()
-	err := l.logger.Log(keyvals...)
-	l.mu.Unlock()
-	return err
 }

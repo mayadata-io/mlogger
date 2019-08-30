@@ -47,18 +47,3 @@ func (entry *Entry) WriterLevel(level Level) *io.PipeWriter {
 
 	return writer
 }
-
-func (entry *Entry) writerScanner(reader *io.PipeReader, printFunc func(args ...interface{})) {
-	scanner := bufio.NewScanner(reader)
-	for scanner.Scan() {
-		printFunc(scanner.Text())
-	}
-	if err := scanner.Err(); err != nil {
-		entry.Errorf("Error while reading from Writer: %s", err)
-	}
-	reader.Close()
-}
-
-func writerFinalizer(writer *io.PipeWriter) {
-	writer.Close()
-}

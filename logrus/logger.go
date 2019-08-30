@@ -41,8 +41,6 @@ type Logger struct {
 	ExitFunc exitFunc
 }
 
-type exitFunc func(int)
-
 type MutexWrap struct {
 	lock     sync.Mutex
 	disabled bool
@@ -85,19 +83,6 @@ func New() *Logger {
 		ExitFunc:     os.Exit,
 		ReportCaller: false,
 	}
-}
-
-func (logger *Logger) newEntry() *Entry {
-	entry, ok := logger.entryPool.Get().(*Entry)
-	if ok {
-		return entry
-	}
-	return NewEntry(logger)
-}
-
-func (logger *Logger) releaseEntry(entry *Entry) {
-	entry.Data = map[string]interface{}{}
-	logger.entryPool.Put(entry)
 }
 
 // Adds a field to the log entry, note that it doesn't log until you call
@@ -293,10 +278,6 @@ func (logger *Logger) Exit(code int) {
 //In these cases user can choose to disable the lock.
 func (logger *Logger) SetNoLock() {
 	logger.mu.Disable()
-}
-
-func (logger *Logger) level() Level {
-	return Level(atomic.LoadUint32((*uint32)(&logger.Level)))
 }
 
 // SetLevel sets the logger level.

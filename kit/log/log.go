@@ -73,56 +73,6 @@ func WithPrefix(logger Logger, keyvals ...interface{}) Logger {
 	}
 }
 
-// context is the Logger implementation returned by With and WithPrefix. It
-// wraps a Logger and holds keyvals that it includes in all log events. Its
-// Log method calls bindValues to generate values for each Valuer in the
-// context keyvals.
-//
-// A context must always have the same number of stack frames between calls to
-// its Log method and the eventual binding of Valuers to their value. This
-// requirement comes from the functional requirement to allow a context to
-// resolve application call site information for a Caller stored in the
-// context. To do this we must be able to predict the number of logging
-// functions on the stack when bindValues is called.
-//
-// Two implementation details provide the needed stack depth consistency.
-//
-//    1. newContext avoids introducing an additional layer when asked to
-//       wrap another context.
-//    2. With and WithPrefix avoid introducing an additional layer by
-//       returning a newly constructed context with a merged keyvals rather
-//       than simply wrapping the existing context.
-type context struct {
-	logger    Logger
-	keyvals   []interface{}
-	hasValuer bool
-}
-
-func newContext(logger Logger) *context {
-	if c, ok := logger.(*context); ok {
-		return c
-	}
-	return &context{logger: logger}
-}
-
-// Log replaces all value elements (odd indexes) containing a Valuer in the
-// stored context with their generated value, appends keyvals, and passes the
-// result to the wrapped Logger.
-func (l *context) Log(keyvals ...interface{}) error {
-	kvs := append(l.keyvals, keyvals...)
-	if len(kvs)%2 != 0 {
-		kvs = append(kvs, ErrMissingValue)
-	}
-	if l.hasValuer {
-		// If no keyvals were appended above then we must copy l.keyvals so
-		// that future log events will reevaluate the stored Valuers.
-		if len(keyvals) == 0 {
-			kvs = append([]interface{}{}, l.keyvals...)
-		}
-		bindValues(kvs[:len(l.keyvals)])
-	}
-	return l.logger.Log(kvs...)
-}
 
 // LoggerFunc is an adapter to allow use of ordinary functions as Loggers. If
 // f is a function with the appropriate signature, LoggerFunc(f) is a Logger

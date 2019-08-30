@@ -2,7 +2,6 @@ package logrus
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -109,13 +108,6 @@ const (
 	DebugLevel
 	// TraceLevel level. Designates finer-grained informational events than the Debug.
 	TraceLevel
-)
-
-// Won't compile if StdLogger can't be realized by a log.Logger
-var (
-	_ StdLogger = &log.Logger{}
-	_ StdLogger = &Entry{}
-	_ StdLogger = &Logger{}
 )
 
 // StdLogger is what your logrus-enabled library should take, that way

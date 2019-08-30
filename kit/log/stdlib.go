@@ -3,7 +3,6 @@ package log
 import (
 	"io"
 	"log"
-	"regexp"
 	"strings"
 )
 
@@ -92,25 +91,3 @@ func (a StdlibAdapter) Write(p []byte) (int, error) {
 	return len(p), nil
 }
 
-const (
-	logRegexpDate = `(?P<date>[0-9]{4}/[0-9]{2}/[0-9]{2})?[ ]?`
-	logRegexpTime = `(?P<time>[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?)?[ ]?`
-	logRegexpFile = `(?P<file>.+?:[0-9]+)?`
-	logRegexpMsg  = `(: )?(?P<msg>.*)`
-)
-
-var (
-	logRegexp = regexp.MustCompile(logRegexpDate + logRegexpTime + logRegexpFile + logRegexpMsg)
-)
-
-func subexps(line []byte) map[string]string {
-	m := logRegexp.FindSubmatch(line)
-	if len(m) < len(logRegexp.SubexpNames()) {
-		return map[string]string{}
-	}
-	result := map[string]string{}
-	for i, name := range logRegexp.SubexpNames() {
-		result[name] = string(m[i])
-	}
-	return result
-}
