@@ -2,6 +2,10 @@ package main
 
 import (
   "go.uber.org/zap"
+  "github.com/Sirupsen/logrus"
+  "github.com/golang/glog"
+  "github.com/go-kit/kit/log/level"
+  "time"
 )
 
 func main() {
