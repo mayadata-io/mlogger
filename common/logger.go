@@ -40,6 +40,7 @@ func InitLogger() *zap.SugaredLogger {
 	cfg.EncoderConfig.LevelKey = "severity"
 	cfg.EncoderConfig.TimeKey = "time"
 	cfg.EncoderConfig.CallerKey = "ecode"
+	cfg.EncoderConfig.EncodeCaller = MayaCallerEncoder
 
 
 
