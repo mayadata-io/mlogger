@@ -1,6 +1,6 @@
 package main
 import (
-  "github.com/mayadata-io/mlogger/glog"
+  "github.com/moteesh/mlogger/glog"
 )
 
 func main() {
