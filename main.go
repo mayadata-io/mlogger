@@ -1,21 +1,25 @@
 package main
 import (
-  "github.com/moteesh/mlogger/glog"
+  "github.com/mayadata-io/mlogger/common"
+  //"github.com/mayadata-io/mlogger/common"
+  //"go.uber.org/zap"
+  "time"
 )
 
 func main() {
+  logger := common.Logger
   //logger, _ := zap.NewProduction()
   //defer logger.Sync() // flushes buffer, if any
-  //sugar := logger.Sugar()
-  //sugar.Infow("failed to fetch URL",
-  //  // Structured context as loosely typed key-value pairs.
-  //  "url", url,
-  //  "attempt", 3,
-  //  "backoff", time.Second,
-  //)
-  //sugar.Infof("Failed to fetch URL: %s", url)
-  //glog.init()
-  glog.Info("hi")
+
+  poolname := "testPool1"
+  logger.Infow("failed to create pool",
+    // Structured context as loosely typed key-value pairs.
+    "rname", poolname,
+    "attempt", 3,
+    "backoff", time.Second,
+    "ecode", "cstor.pool.create.failed",
+  )
+  logger.Infof("Failed to create pool: %s", poolname)
 }
 
 
