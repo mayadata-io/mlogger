@@ -3,7 +3,7 @@ package glog
 import (
 
 	"github.com/golang/glog"
-	"go.uber.org/zap"
+	//"go.uber.org/zap"
 )
 
 // Flush flushes all pending log I/O.
