@@ -3,6 +3,8 @@ package glog
 import (
 
 	"github.com/golang/glog"
+	"github.com/mayadata-io/mlogger/common"
+
 	//"go.uber.org/zap"
 )
 
@@ -43,7 +45,8 @@ func Infoln(args ...interface{}) {
 // Infof logs to the INFO log.
 // Arguments are handled in the manner of fmt.Printf; a newline is appended if missing.
 func Infof(format string, args ...interface{}) {
-	glog.Infof(format, args)
+	logger := common.Logger
+	logger.Infof(format, args)
 }
 
 // Warning logs to the WARNING and INFO logs.
