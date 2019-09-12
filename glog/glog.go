@@ -41,10 +41,10 @@ func Info(args ...interface{}) {
 // InfoDepth acts as Info but uses depth to determine which call frame to log.
 // InfoDepth(0, "msg") is the same as Info("msg").
 func InfoDepth(depth int, args ...interface{}) {
-	//gglog.InfoDepth(depth, args)
+	gglog.InfoDepth(depth, args)
 	//logger.InfoDepth(depth, args)
 	//TODO: depth not supported in this version of mlogger
-	logger.Info(args)
+	//logger.Info(args)
 }
 
 // Infoln logs to the INFO log.
@@ -70,10 +70,10 @@ func Warning(args ...interface{}) {
 // WarningDepth acts as Warning but uses depth to determine which call frame to log.
 // WarningDepth(0, "msg") is the same as Warning("msg").
 func WarningDepth(depth int, args ...interface{}) {
-	//gglog.WarningDepth(depth, args)
+	gglog.WarningDepth(depth, args)
 	//logger.WarningDepth(depth, args)
 	//TODO: depth not supported in this version of mlogger
-	logger.Warn(args)
+	//logger.Warn(args)
 }
 
 // Warningln logs to the WARNING and INFO logs.
@@ -100,10 +100,10 @@ func Error(args ...interface{}) {
 // ErrorDepth acts as Error but uses depth to determine which call frame to log.
 // ErrorDepth(0, "msg") is the same as Error("msg").
 func ErrorDepth(depth int, args ...interface{}) {
-	//gglog.ErrorDepth(depth, args)
+	gglog.ErrorDepth(depth, args)
 	//logger.ErrorDepth(depth, args)
 	//TODO: depth not supported in this version of mlogger
-	logger.Error(args)
+	//logger.Error(args)
 }
 
 // Errorln logs to the ERROR, WARNING, and INFO logs.
@@ -131,10 +131,10 @@ func Fatal(args ...interface{}) {
 // FatalDepth acts as Fatal but uses depth to determine which call frame to log.
 // FatalDepth(0, "msg") is the same as Fatal("msg").
 func FatalDepth(depth int, args ...interface{}) {
-	//gglog.FatalDepth(depth, args)
+	gglog.FatalDepth(depth, args)
 	//logger.FatalDepth(depth, args)
 	//TODO: depth not supported in this version of mlogger
-	logger.Fatal(args)
+	//logger.Fatal(args)
 }
 
 // Fatalln logs to the FATAL, ERROR, WARNING, and INFO logs,
@@ -163,10 +163,10 @@ func Exit(args ...interface{}) {
 // ExitDepth acts as Exit but uses depth to determine which call frame to log.
 // ExitDepth(0, "msg") is the same as Exit("msg").
 func ExitDepth(depth int, args ...interface{}) {
-	//gglog.ExitDepth(depth, args)
+	gglog.ExitDepth(depth, args)
 	//logger.ExitDepth(depth, args)
 	//TODO: depth not supported in this version of mlogger
-	logger.Fatal(args)
+	//logger.Fatal(args)
 }
 
 // Exitln logs to the FATAL, ERROR, WARNING, and INFO logs, then calls os.Exit(1).
@@ -205,26 +205,26 @@ func V(level Level) Verbose {
 // Info is equivalent to the global Info function, guarded by the value of v.
 // See the documentation of V for usage.
 func (v Verbose) Info(args ...interface{}) {
-	//gglog.Verbose(v).Info(args)
+	gglog.Verbose(v).Info(args)
 	//logger.Verbose(v).Info(args)
 	//TODO: verbose level not supported in this version of mlogger
-	logger.Info(args)
+	//logger.Info(args)
 }
 
 // Infoln is equivalent to the global Infoln function, guarded by the value of v.
 // See the documentation of V for usage.
 func (v Verbose) Infoln(args ...interface{}) {
-	//gglog.Verbose(v).Infoln(args)
+	gglog.Verbose(v).Infoln(args)
 	//logger.Verbose(v).Infoln(args)
 	//TODO: verbose level not supported in this version of mlogger
-	logger.Info(args)
+	//logger.Info(args)
 }
 
 // Infof is equivalent to the global Infof function, guarded by the value of v.
 // See the documentation of V for usage.
 func (v Verbose) Infof(format string, args ...interface{}) {
-	//gglog.Verbose(v).Infof(format, args)
+	gglog.Verbose(v).Infof(format, args)
 	//logger.Verbose(v).Infof(format, args)
 	//TODO: verbose level not supported in this version of mlogger
-	logger.Infof(format, args)
+	//logger.Infof(format, args)
 }
