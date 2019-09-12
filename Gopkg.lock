@@ -45,7 +45,6 @@
   analyzer-version = 1
   input-imports = [
     "github.com/golang/glog",
-    "go.uber.org/multierr",
     "go.uber.org/zap",
     "go.uber.org/zap/zapcore",
   ]
