@@ -7,11 +7,14 @@ import (
 	//"go.uber.org/zap"
 )
 
+var (
+	logger = common.Logger
+)
+
 // Flush flushes all pending log I/O.
 func Flush() {
 	//gglog.Flush()
-	logger := common.Logger
-	logger.Flush()
+	logger.Sync()
 }
 
 // CopyStandardLogTo arranges for messages written to the Go "log" package's
@@ -23,15 +26,15 @@ func Flush() {
 // recognized, CopyStandardLogTo panics.
 func CopyStandardLogTo(name string) {
 	//gglog.CopyStandardLogTo(name)
-	logger := common.Logger
-	logger.CopyStandardLogTo(name)
+	//logger.CopyStandardLogTo(name)
+	//TODO: not supported in this version of mlogger
+	return
 }
 
 // Info logs to the INFO log.
 // Arguments are handled in the manner of fmt.Print; a newline is appended if missing.
 func Info(args ...interface{}) {
 	//gglog.Info(args)
-	logger := common.Logger
 	logger.Info(args)
 }
 
@@ -39,22 +42,21 @@ func Info(args ...interface{}) {
 // InfoDepth(0, "msg") is the same as Info("msg").
 func InfoDepth(depth int, args ...interface{}) {
 	//gglog.InfoDepth(depth, args)
-	logger := common.Logger
-	logger.InfoDepth(depth, args)
+	//logger.InfoDepth(depth, args)
+	//TODO: depth not supported in this version of mlogger
+	logger.Info(args)
 }
 
 // Infoln logs to the INFO log.
 // Arguments are handled in the manner of fmt.Println; a newline is appended if missing.
 func Infoln(args ...interface{}) {
 	//gglog.Infoln(args)
-	logger := common.Logger
-	logger.Infoln(args)
+	logger.Info(args)
 }
 
 // Infof logs to the INFO log.
 // Arguments are handled in the manner of fmt.Printf; a newline is appended if missing.
 func Infof(format string, args ...interface{}) {
-	logger := common.Logger
 	logger.Infof(format, args)
 }
 
@@ -62,39 +64,36 @@ func Infof(format string, args ...interface{}) {
 // Arguments are handled in the manner of fmt.Print; a newline is appended if missing.
 func Warning(args ...interface{}) {
 	//gglog.Warning(args)
-	logger := common.Logger
-	logger.Warning(args)
+	logger.Warn(args)
 }
 
 // WarningDepth acts as Warning but uses depth to determine which call frame to log.
 // WarningDepth(0, "msg") is the same as Warning("msg").
 func WarningDepth(depth int, args ...interface{}) {
 	//gglog.WarningDepth(depth, args)
-	logger := common.Logger
-	logger.WarningDepth(depth, args)
+	//logger.WarningDepth(depth, args)
+	//TODO: depth not supported in this version of mlogger
+	logger.Warn(args)
 }
 
 // Warningln logs to the WARNING and INFO logs.
 // Arguments are handled in the manner of fmt.Println; a newline is appended if missing.
 func Warningln(args ...interface{}) {
 	//gglog.Warningln(args)
-	logger := common.Logger
-	logger.Warningln(args)
+	logger.Warn(args)
 }
 
 // Warningf logs to the WARNING and INFO logs.
 // Arguments are handled in the manner of fmt.Printf; a newline is appended if missing.
 func Warningf(format string, args ...interface{}) {
 	//gglog.Warningf(format, args)
-	logger := common.Logger
-	logger.Warningf(format, args)
+	logger.Warnf(format, args)
 }
 
 // Error logs to the ERROR, WARNING, and INFO logs.
 // Arguments are handled in the manner of fmt.Print; a newline is appended if missing.
 func Error(args ...interface{}) {
 	//gglog.Error(args)
-	logger := common.Logger
 	logger.Error(args)
 }
 
@@ -102,23 +101,22 @@ func Error(args ...interface{}) {
 // ErrorDepth(0, "msg") is the same as Error("msg").
 func ErrorDepth(depth int, args ...interface{}) {
 	//gglog.ErrorDepth(depth, args)
-	logger := common.Logger
-	logger.ErrorDepth(depth, args)
+	//logger.ErrorDepth(depth, args)
+	//TODO: depth not supported in this version of mlogger
+	logger.Error(args)
 }
 
 // Errorln logs to the ERROR, WARNING, and INFO logs.
 // Arguments are handled in the manner of fmt.Println; a newline is appended if missing.
 func Errorln(args ...interface{}) {
 	//gglog.Errorln(args)
-	logger := common.Logger
-	logger.Errorln(args)
+	logger.Error(args)
 }
 
 // Errorf logs to the ERROR, WARNING, and INFO logs.
 // Arguments are handled in the manner of fmt.Printf; a newline is appended if missing.
 func Errorf(format string, args ...interface{}) {
 	//gglog.Errorf(format, args)
-	logger := common.Logger
 	logger.Errorf(format, args)
 }
 
@@ -127,7 +125,6 @@ func Errorf(format string, args ...interface{}) {
 // Arguments are handled in the manner of fmt.Print; a newline is appended if missing.
 func Fatal(args ...interface{}) {
 	//gglog.Fatal(args)
-	logger := common.Logger
 	logger.Fatal(args)
 }
 
@@ -135,8 +132,9 @@ func Fatal(args ...interface{}) {
 // FatalDepth(0, "msg") is the same as Fatal("msg").
 func FatalDepth(depth int, args ...interface{}) {
 	//gglog.FatalDepth(depth, args)
-	logger := common.Logger
-	logger.FatalDepth(depth, args)
+	//logger.FatalDepth(depth, args)
+	//TODO: depth not supported in this version of mlogger
+	logger.Fatal(args)
 }
 
 // Fatalln logs to the FATAL, ERROR, WARNING, and INFO logs,
@@ -144,8 +142,7 @@ func FatalDepth(depth int, args ...interface{}) {
 // Arguments are handled in the manner of fmt.Println; a newline is appended if missing.
 func Fatalln(args ...interface{}) {
 	//gglog.Fatalln(args)
-	logger := common.Logger
-	logger.Fatalln(args)
+	logger.Fatal(args)
 }
 
 // Fatalf logs to the FATAL, ERROR, WARNING, and INFO logs,
@@ -153,7 +150,6 @@ func Fatalln(args ...interface{}) {
 // Arguments are handled in the manner of fmt.Printf; a newline is appended if missing.
 func Fatalf(format string, args ...interface{}) {
 	//gglog.Fatalf(format, args)
-	logger := common.Logger
 	logger.Fatalf(format, args)
 }
 
@@ -161,31 +157,29 @@ func Fatalf(format string, args ...interface{}) {
 // Arguments are handled in the manner of fmt.Print; a newline is appended if missing.
 func Exit(args ...interface{}) {
 	//gglog.Exit(args)
-	logger := common.Logger
-	logger.Exit(args)
+	logger.Fatal(args)
 }
 
 // ExitDepth acts as Exit but uses depth to determine which call frame to log.
 // ExitDepth(0, "msg") is the same as Exit("msg").
 func ExitDepth(depth int, args ...interface{}) {
 	//gglog.ExitDepth(depth, args)
-	logger := common.Logger
-	logger.ExitDepth(depth, args)
+	//logger.ExitDepth(depth, args)
+	//TODO: depth not supported in this version of mlogger
+	logger.Fatal(args)
 }
 
 // Exitln logs to the FATAL, ERROR, WARNING, and INFO logs, then calls os.Exit(1).
 func Exitln(args ...interface{}) {
 	//gglog.Exitln(args)
-	logger := common.Logger
-	logger.Exitln(args)
+	logger.Fatal(args)
 }
 
 // Exitf logs to the FATAL, ERROR, WARNING, and INFO logs, then calls os.Exit(1).
 // Arguments are handled in the manner of fmt.Printf; a newline is appended if missing.
 func Exitf(format string, args ...interface{}) {
 	//gglog.Exitf(format, args)
-	logger := common.Logger
-	logger.Exitf(format, args)
+	logger.Fatalf(format, args)
 }
 
 type Level gglog.Level
@@ -212,22 +206,25 @@ func V(level Level) Verbose {
 // See the documentation of V for usage.
 func (v Verbose) Info(args ...interface{}) {
 	//gglog.Verbose(v).Info(args)
-	logger := common.Logger
-	logger.Verbose(v).Info(args)
+	//logger.Verbose(v).Info(args)
+	//TODO: verbose level not supported in this version of mlogger
+	logger.Info(args)
 }
 
 // Infoln is equivalent to the global Infoln function, guarded by the value of v.
 // See the documentation of V for usage.
 func (v Verbose) Infoln(args ...interface{}) {
 	//gglog.Verbose(v).Infoln(args)
-	logger := common.Logger
-	logger.Verbose(v).Infoln(args)
+	//logger.Verbose(v).Infoln(args)
+	//TODO: verbose level not supported in this version of mlogger
+	logger.Info(args)
 }
 
 // Infof is equivalent to the global Infof function, guarded by the value of v.
 // See the documentation of V for usage.
 func (v Verbose) Infof(format string, args ...interface{}) {
 	//gglog.Verbose(v).Infof(format, args)
-	logger := common.Logger
-	logger.Verbose(v).Infof(format, args)
+	//logger.Verbose(v).Infof(format, args)
+	//TODO: verbose level not supported in this version of mlogger
+	logger.Infof(format, args)
 }
