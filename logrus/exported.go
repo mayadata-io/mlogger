@@ -39,7 +39,7 @@ func GetLevel() Level {
 
 // IsLevelEnabled checks if the log level of the standard logger is greater than the level param
 func IsLevelEnabled(level Level) bool {
-	lrs.IsLevelEnabled((lrs.Level)(level))
+	return lrs.IsLevelEnabled((lrs.Level)(level))
 }
 
 // AddHook adds a hook to the standard logger hooks.

@@ -19,7 +19,7 @@ func NewEntry(logger *Logger) *Entry {
 	return (*Entry)(&lrs.Entry{
 		Logger: (*lrs.Logger)(logger),
 		// Default is three fields, plus one optional.  Give a little extra room.
-		Data: make(Fields, 6),
+		Data: (lrs.Fields)(make(Fields, 6)),
 	})
 }
 
