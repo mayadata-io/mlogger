@@ -191,7 +191,7 @@ func Fatalln(args ...interface{}) {
 }
 
 // A constant exposing all logging levels
-var AllLevels = lrs.AllLevels
+//var AllLevels = lrs.AllLevels
 
 // These are the different logging levels. You can set the logging level to log
 // on your instance of logger, obtained with `logrus.New()`.
@@ -213,5 +213,5 @@ const (
 	// DebugLevel level. Usually only enabled when debugging. Very verbose logging.
 	DebugLevel = lrs.DebugLevel
 	// TraceLevel level. Designates finer-grained informational events than the Debug.
-	TraceLevel = lrs.TraceLevel
+	//TraceLevel = lrs.TraceLevel
 )
