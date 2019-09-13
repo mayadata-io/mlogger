@@ -27,4 +27,8 @@ const (
 // Any additional fields added with `WithField` or `WithFields` are also in
 // `entry.Data`. Format is expected to return an array of bytes which are then
 // logged to `logger.Out`.
-type Formatter lrs.Formatter
+//type Formatter lrs.Formatter
+type Formatter interface {
+	Format(*Entry) ([]byte, error)
+	GetTFormatter() lrs.Formatter
+}

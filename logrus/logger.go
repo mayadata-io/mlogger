@@ -227,9 +227,12 @@ func (logger *Logger) IsLevelEnabled(level Level) bool {
 	return (*lrs.Logger)(logger).IsLevelEnabled((lrs.Level)(level))
 }
 
+
+
+
 // SetFormatter sets the logger formatter.
 func (logger *Logger) SetFormatter(formatter Formatter) {
-	(*lrs.Logger)(logger).SetFormatter((lrs.Formatter)(formatter))
+	(*lrs.Logger)(logger).SetFormatter(formatter.GetTFormatter())
 }
 
 // SetOutput sets the logger output.
