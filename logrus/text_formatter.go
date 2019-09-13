@@ -4,24 +4,19 @@ import (
 	lrs "github.com/Sirupsen/logrus"
 )
 
-// InternalFormatter formats logs into text
-type InternalFormatter lrs.TextFormatter
+type WrapFormatter struct {
+	internal Formatter
+}
 
 // Format renders a single log entry
-func (f *InternalFormatter) Format(entry *lrs.Entry) ([]byte, error) {
-	return (*lrs.TextFormatter)(f).Format(entry)
+func (f *WrapFormatter) Format(entry *lrs.Entry) ([]byte, error) {
+	return f.internal.Format((*Entry)(entry))
 }
 
-type TextFormatter struct {
-	tformatter 	lrs.TextFormatter
-}
+// TextFormatter formats logs into text
+type TextFormatter lrs.TextFormatter
 
 // Format renders a single log entry
 func (f *TextFormatter) Format(entry *Entry) ([]byte, error) {
-	return f.tformatter.Format((*lrs.Entry)(entry))
-}
-
-// GetTFormatter return TextFormatter
-func (f *TextFormatter) GetTFormatter() lrs.TextFormatter {
-	return f.tformatter
+	return (*lrs.TextFormatter)(f).Format((*lrs.Entry)(entry))
 }

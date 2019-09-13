@@ -30,5 +30,4 @@ const (
 //type Formatter lrs.Formatter
 type Formatter interface {
 	Format(*Entry) ([]byte, error)
-	GetTFormatter() lrs.Formatter
 }

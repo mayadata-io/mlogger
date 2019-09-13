@@ -39,7 +39,7 @@ func (mw *MutexWrap) Disable() {
 func New() *Logger {
 	return (*Logger)(&lrs.Logger{
 		Out:          os.Stderr,
-		Formatter:    (*lrs.TextFormatter)(new(TextFormatter)),
+		Formatter:    &WrapFormatter{internal:new(TextFormatter)},
 		Hooks:        (lrs.LevelHooks)(make(LevelHooks)),
 		Level:        (lrs.Level)(InfoLevel),
 		ExitFunc:     os.Exit,
@@ -228,11 +228,9 @@ func (logger *Logger) IsLevelEnabled(level Level) bool {
 }
 
 
-
-
 // SetFormatter sets the logger formatter.
 func (logger *Logger) SetFormatter(formatter Formatter) {
-	(*lrs.Logger)(logger).SetFormatter(formatter.GetTFormatter())
+	(*lrs.Logger)(logger).SetFormatter(&WrapFormatter{internal:formatter})
 }
 
 // SetOutput sets the logger output.

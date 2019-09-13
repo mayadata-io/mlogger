@@ -18,7 +18,7 @@ func SetOutput(out io.Writer) {
 
 // SetFormatter sets the standard logger formatter.
 func SetFormatter(formatter Formatter) {
-	lrs.SetFormatter((lrs.Formatter)(formatter))
+	lrs.SetFormatter(&WrapFormatter{ internal: formatter})
 }
 
 // SetReportCaller sets whether the standard logger will include the calling
