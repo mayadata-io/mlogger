@@ -12,4 +12,3 @@ func (f *TextFormatter) Format(entry *Entry) ([]byte, error) {
 	return (*lrs.TextFormatter)(f).Format((*lrs.Entry)(entry))
 }
 
-
