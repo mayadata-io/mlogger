@@ -60,7 +60,7 @@ func WithField(key string, value interface{}) *lrs.Entry {
 //
 // Note that it doesn't log until you call Debug, Print, Info, Warn, Fatal
 // or Panic on the Entry it returns.
-func WithFields(fields Fields) *lrs.Entry {
+func WithFields(fields lrs.Fields) *lrs.Entry {
 	return lrs.WithFields(fields)
 }
 
