@@ -21,27 +21,27 @@ func SetOutput(out io.Writer) {
 }
 
 // SetFormatter sets the standard logger formatter.
-func SetFormatter(formatter Formatter) {
+func SetFormatter(formatter lrs.Formatter) {
 	lrs.SetFormatter(formatter)
 }
 
 // SetLevel sets the standard logger level.
-func SetLevel(level Level) {
+func SetLevel(level lrs.Level) {
 	lrs.SetLevel(level)
 }
 
 // GetLevel returns the standard logger level.
-func GetLevel() Level {
+func GetLevel() lrs.Level {
 	return lrs.GetLevel()
 }
 
 // AddHook adds a hook to the standard logger hooks.
-func AddHook(hook Hook) {
+func AddHook(hook lrs.Hook) {
 	lrs.AddHook(hook)
 }
 
 // WithError creates an entry from the standard logger and adds an error to it, using the value defined in ErrorKey as key.
-func WithError(err error) *Entry {
+func WithError(err error) *lrs.Entry {
 	return lrs.WithError(err)
 }
 
@@ -50,7 +50,7 @@ func WithError(err error) *Entry {
 //
 // Note that it doesn't log until you call Debug, Print, Info, Warn, Fatal
 // or Panic on the Entry it returns.
-func WithField(key string, value interface{}) *Entry {
+func WithField(key string, value interface{}) *lrs.Entry {
 	return lrs.WithField(key, value)
 }
 
@@ -60,7 +60,7 @@ func WithField(key string, value interface{}) *Entry {
 //
 // Note that it doesn't log until you call Debug, Print, Info, Warn, Fatal
 // or Panic on the Entry it returns.
-func WithFields(fields Fields) *Entry {
+func WithFields(fields Fields) *lrs.Entry {
 	return lrs.WithFields(fields)
 }
 
