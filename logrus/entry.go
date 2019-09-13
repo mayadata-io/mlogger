@@ -1,15 +1,9 @@
 package logrus
 
 import (
-	"bytes"
 	"context"
-	"fmt"
-	"os"
-	"reflect"
-	"runtime"
-	"strings"
-	"time"
 	lrs "github.com/Sirupsen/logrus"
+	"time"
 )
 
 // Defines the key when adding errors using WithError.

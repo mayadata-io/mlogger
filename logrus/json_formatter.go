@@ -1,10 +1,6 @@
 package logrus
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-	"runtime"
 	lrs "github.com/Sirupsen/logrus"
 )
 

@@ -1,10 +1,8 @@
 package logrus
 
 import (
-	"bufio"
-	"io"
-	"runtime"
 	lrs "github.com/Sirupsen/logrus"
+	"io"
 )
 
 func (logger *Logger) Writer() *io.PipeWriter {
