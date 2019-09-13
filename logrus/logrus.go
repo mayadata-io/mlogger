@@ -10,9 +10,10 @@ var (
 	logger = common.Logger
 )
 
+type Logger lrs.Logger
 
-func StandardLogger() *lrs.Logger {
-	return lrs.StandardLogger()
+func StandardLogger() *Logger {
+	return (*Logger)(lrs.StandardLogger())
 }
 
 // SetOutput sets the standard logger output.
@@ -20,29 +21,33 @@ func SetOutput(out io.Writer) {
 	lrs.SetOutput(out)
 }
 
+type Formatter lrs.Formatter
 // SetFormatter sets the standard logger formatter.
-func SetFormatter(formatter lrs.Formatter) {
+func SetFormatter(formatter Formatter) {
 	lrs.SetFormatter(formatter)
 }
 
+type Level lrs.Level
 // SetLevel sets the standard logger level.
-func SetLevel(level lrs.Level) {
-	lrs.SetLevel(level)
+func SetLevel(level Level) {
+	lrs.SetLevel((lrs.Level)(level))
 }
 
 // GetLevel returns the standard logger level.
-func GetLevel() lrs.Level {
-	return lrs.GetLevel()
+func GetLevel() Level {
+	return (Level)(lrs.GetLevel())
 }
 
+type Hook lrs.Hook
 // AddHook adds a hook to the standard logger hooks.
-func AddHook(hook lrs.Hook) {
-	lrs.AddHook(hook)
+func AddHook(hook Hook) {
+	lrs.AddHook((lrs.Hook)(hook))
 }
 
+type Entry lrs.Entry
 // WithError creates an entry from the standard logger and adds an error to it, using the value defined in ErrorKey as key.
-func WithError(err error) *lrs.Entry {
-	return lrs.WithError(err)
+func WithError(err error) *Entry {
+	return (*Entry)(lrs.WithError(err))
 }
 
 // WithField creates an entry from the standard logger and adds a field to
@@ -50,18 +55,19 @@ func WithError(err error) *lrs.Entry {
 //
 // Note that it doesn't log until you call Debug, Print, Info, Warn, Fatal
 // or Panic on the Entry it returns.
-func WithField(key string, value interface{}) *lrs.Entry {
-	return lrs.WithField(key, value)
+func WithField(key string, value interface{}) *Entry {
+	return (*Entry)(lrs.WithField(key, value))
 }
 
+type Fields lrs.Fields
 // WithFields creates an entry from the standard logger and adds multiple
 // fields to it. This is simply a helper for `WithField`, invoking it
 // once for each field.
 //
 // Note that it doesn't log until you call Debug, Print, Info, Warn, Fatal
 // or Panic on the Entry it returns.
-func WithFields(fields lrs.Fields) *lrs.Entry {
-	return lrs.WithFields(fields)
+func WithFields(fields Fields) *Entry {
+	return (*Entry)(lrs.WithFields((lrs.Fields)(fields)))
 }
 
 // Debug logs a message at level Debug on the standard logger.
